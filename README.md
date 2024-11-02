@@ -80,23 +80,44 @@ Get BMS information
         "3": 3.335,
         "4": 3.333
     },
-    "current": 0,
+    "current": 15.04,
+    "watt": 189.435,
     "remianAh": 105.0,
     "factoryAh": 105.0,
     "cellTemperature": 25,
     "mosfetTemperature": 26,
-    "heat": 72,
-    "protectState": 0,
-    "failureState": 0,
+    "heat": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "protectState": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "failureState": [
+        0,
+        0,
+        0,
+        0
+    ],
     "equilibriumState": 0,
-    "batteryState": 4,
+    "batteryState": 1,
     "SOC": "100%",
     "SOH": "105%",
     "dischargesCount": 0,
     "dischargesAHCount": 101,
     "firmwareVersion": "1.4.0",
     "manfactureDate": "1980-01-01",
-    "hardwareVersion": "T12345678"
+    "hardwareVersion": "T12345678",
+    "battery_status": "Charging",
+    "balance_status": "All cells are well-balanced.",
+    "cell_status": "Battery is in optimal working condition.",
+    "bms_status": null,
+    "heat_status": null
 }
 ```
 
