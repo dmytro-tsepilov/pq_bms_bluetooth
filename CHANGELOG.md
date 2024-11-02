@@ -1,3 +1,13 @@
+## [0.1.3] - 2024.11.02
+
+### Added
+- Added human readable battery status variables: `bms_status`, `heat_status`
+ 
+### Changed
+
+### Fixed
+
+
 ## [0.1.2] - 2024.11.02
 
 ### Added

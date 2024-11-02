@@ -167,6 +167,21 @@ class BatteryInfo:
         else:
             self.cell_status = "Battery is in optimal working condition."
 
+        # To fix: Search for bms_status metric
+        # if self.failureState[2] > 0:
+        #     self.bms_status = "⚠Warning! BMS failure."
+        # else:
+        #     if self.protectState:
+        #         self.bms_status = "Protection mode is on."
+        #     else:
+        #         self.bms_status = "BMS is running smoothly."
+
+
+        # To fix: Search for heat metric
+        # if self.heat:
+        #     self.heat_status = "Self-heating is on"
+        # else:
+        #     self.heat_status = "Self-heating is off"
 
     def parse_version(self, data):
         '''
