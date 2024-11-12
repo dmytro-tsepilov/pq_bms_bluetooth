@@ -61,7 +61,7 @@ positional arguments:
 options:
   -h, --help         show this help message and exit
   --bms              Get battery BMS info
-  --timeout TIMEOUT  Bluetooth response timout in seconds (default: 4)
+  --timeout TIMEOUT  Bluetooth response timeout in seconds (default: 4)
   --pair             Pair with device before interacting
   -s, --services     List device GATT services and characteristics
   --verbose          Verbose logs
