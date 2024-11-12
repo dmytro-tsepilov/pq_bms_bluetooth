@@ -8,7 +8,10 @@ class BatteryInfo:
     Class parse BMS information from PowerQueen LiFePO4 battery over bluetooth
 
     Attributes:
-        logger (str): Instance of python logger.
+        bluetooth_device_mac (str): Bluetooth address (MAC)
+        pair_device (bool):         Pair with device before communication
+        timeout (int):              Timeout in seconds for bluetooth device communication
+        logger (str):               Instance of python logger.
     '''
     BMS_CHARACTERISTIC_ID = '0000FFE1-0000-1000-8000-00805F9B34FB' ## Bluetooth characteristic for BMS data
     SN_CHARACTERISTIC_ID = "0000FFE2-0000-1000-8000-00805F9B34FB" ## characteristic for reading serial number (seems not implemented)
@@ -21,7 +24,11 @@ class BatteryInfo:
         'SERIAL_NUMBER'    : '00 00 04 01 10 55 AA 14'
     }
 
-    def __init__(self, bluetooth_device_mac: str, pair_device: bool=False, logger=None):
+    def __init__(self,
+                 bluetooth_device_mac: str,
+                 pair_device: bool=False,
+                 timeout: int = 2,
+                 logger=None):
         self.packVoltage = None
         self.voltage = None
         self.batteryPack: dict = {}
@@ -60,6 +67,7 @@ class BatteryInfo:
         self._request = Request(
             bluetooth_device_mac,
             pair_device=pair_device,
+            timeout=timeout,
             logger=self._logger
         )
 

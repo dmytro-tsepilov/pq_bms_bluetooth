@@ -53,17 +53,18 @@ Start bluetooth tool `bluetoothctl` and scan for available bluetooth devices `sc
 
 ```
 # python main.py --help
-usage: main.py [-h] [--bms] [--pair] [-s] [--verbose] DEVICE_MAC
+usage: main.py [-h] [--bms] [--timeout TIMEOUT] [--pair] [-s] [--verbose] DEVICE_MAC
 
 positional arguments:
-  DEVICE_MAC      Bluetooth device MAC address in format 12:34:56:78:AA:CC
+  DEVICE_MAC         Bluetooth device MAC address in format 12:34:56:78:AA:CC
 
 options:
-  -h, --help      show this help message and exit
-  --bms           Get battery BMS info
-  --pair          Pair with device before interacting
-  -s, --services  List device GATT services and characteristics
-  --verbose       Verbose logs
+  -h, --help         show this help message and exit
+  --bms              Get battery BMS info
+  --timeout TIMEOUT  Bluetooth response timeout in seconds (default: 4)
+  --pair             Pair with device before interacting
+  -s, --services     List device GATT services and characteristics
+  --verbose          Verbose logs
 ```
 
 ### Examples
