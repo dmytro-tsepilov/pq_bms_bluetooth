@@ -11,7 +11,7 @@ def commands():
                         type=str)
 
     parser.add_argument("--bms", help="Get battery BMS info", action="store_true")
-    parser.add_argument("--timeout", help="Bluetooth response timeout in seconds (default: 4)", type=int, default=4)
+    parser.add_argument("-t", "--timeout", help="Bluetooth response timeout in seconds (default: 4)", type=int, default=4)
     parser.add_argument("--pair", help="Pair with device before interacting", action="store_true")
     parser.add_argument("-s", "--services", help="List device GATT services and characteristics", action="store_true")
     parser.add_argument("--verbose", help="Verbose logs", action="store_true")
