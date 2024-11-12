@@ -141,6 +141,10 @@ class BatteryInfo:
         self.protectState = list(data[76:80][::-1])
         self.failureState = list(data[80:84][::-1])
         self.equilibriumState = int.from_bytes(data[84:88][::-1], byteorder='big')
+
+        ## Charging - 1
+        ## Discharging - 2
+        ## Full Charge / Idle - 4
         self.batteryState = int.from_bytes(data[88:90][::-1], byteorder='big')
 
         ## Charge level
