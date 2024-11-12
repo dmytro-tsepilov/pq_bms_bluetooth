@@ -1,3 +1,11 @@
+## [0.1.3] - 2024.11.12
+
+### Added
+- Added `--timeout` option for setting timeout in seconds for bluetooth device communication
+
+### Changed
+- Updated minor versions of `bleak` and `dbus-fast` libraries
+
 ## [0.1.2] - 2024.11.02
 
 ### Added

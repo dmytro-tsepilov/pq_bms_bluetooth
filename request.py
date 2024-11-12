@@ -5,11 +5,15 @@ from bleak import BleakClient, BleakGATTCharacteristic
 
 
 class Request:
-    def __init__(self, bluetooth_device_mac: str, pair_device=False, logger=None):
+    def __init__(self,
+                 bluetooth_device_mac: str,
+                 pair_device: bool = False,
+                 timeout: int = 2,
+                 logger=None):
         self.bluetooth_device_mac = bluetooth_device_mac
         self.pair = pair_device
         self.callback_func = None
-        self.bluetooth_timeout = 2
+        self.bluetooth_timeout = timeout
 
         if logger:
             self.logger = logger
@@ -26,7 +30,7 @@ class Request:
         '''
           Bulk send commands to device
         '''
-        self.logger.info("Connecting to %s...", self.bluetooth_device_mac)
+        self.logger.info("Connecting to %s... (timeout: %s)", self.bluetooth_device_mac, self.bluetooth_timeout)
         async with BleakClient(self.bluetooth_device_mac, timeout=self.bluetooth_timeout) as client:
             if self.pair:
                 self.logger.info("Pairing %s...", self.bluetooth_device_mac)
