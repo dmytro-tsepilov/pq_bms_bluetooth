@@ -42,6 +42,7 @@ def main():
     if args.bms:
         battery.read_bms()
         print(battery.get_json())
+        sys.exit(battery.error_code)
 
 
 if __name__ == "__main__":

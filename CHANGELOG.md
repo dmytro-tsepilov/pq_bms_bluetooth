@@ -1,3 +1,18 @@
+## [0.1.4] - 2024.12.13
+
+### Added
+- Added handling exceptions
+- Added new fields to response:
+    `error_code` - different from zero means error
+    `error_message` - human readble error message
+- `error_code` added as exit code of script
+
+### Fixed
+- Fixed rounding of the calculated `watt` variable to two digits
+
+### Changed
+- Updated minor version of `dbus-fast` library
+
 ## [0.1.3] - 2024.11.12
 
 ### Added

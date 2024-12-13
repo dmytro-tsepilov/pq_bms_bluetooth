@@ -1,6 +1,7 @@
 import json
 import asyncio
 import logging
+from bleak import BleakError
 from request import Request
 
 class BatteryInfo:
@@ -59,6 +60,12 @@ class BatteryInfo:
         self.bms_status = None
         self.heat_status = None
 
+        ## Error handling
+        self.error_code = 0
+        self.error_message = None
+
+        self._debug = False
+
         if logger:
             self._logger = logger
         else:
@@ -81,15 +88,31 @@ class BatteryInfo:
         '''
           Function read BMS info via bluetooth using bleak client
         '''
-        asyncio.run(self._request.bulk_send(
-            characteristic_id = self.BMS_CHARACTERISTIC_ID,
-            commands_parsers = {
-                self.pq_commands["GET_VERSION"]: self.parse_version,
-                self.pq_commands["GET_BATTERY_INFO"]: self.parse_battery_info,
-                ## Internal SN not used or not implemented
-                ## self.pq_commands["SERIAL_NUMBER"]: self.parse_serial_number
-            }
-        ))
+        try:
+            asyncio.run(self._request.bulk_send(
+                characteristic_id = self.BMS_CHARACTERISTIC_ID,
+                commands_parsers = {
+                    self.pq_commands["GET_VERSION"]: self.parse_version,
+                    self.pq_commands["GET_BATTERY_INFO"]: self.parse_battery_info,
+                    ## Internal SN not used or not implemented
+                    ## self.pq_commands["SERIAL_NUMBER"]: self.parse_serial_number
+                }
+            ))
+        except BleakError as e:
+            self.error_code = 4
+            self.error_message = f"{e.__class__.__name__}: {e}"
+            if self._debug:
+                raise
+        except TimeoutError as e:
+            self.error_code = 2
+            self.error_message = f"{e.__class__.__name__}: {e}"
+            if self._debug:
+                raise
+        except Exception as e:
+            self.error_code = 1
+            self.error_message = f"{e}"
+            if self._debug:
+                raise
 
     def get_json(self):
         '''
@@ -98,6 +121,7 @@ class BatteryInfo:
         state = self.__dict__
         del state['_logger']
         del state['_request']
+        del state['_debug']
         state['SOC'] = f"{self.SOC}%"
         state['SOH'] = f"{self.SOH}%"
 
@@ -129,7 +153,8 @@ class BatteryInfo:
         self.current = round(current / 1000, 2)
 
         ## Calculated load \ unload Watt
-        self.watt = round((self.voltage * +current) / 10000, 1) / 100
+        watt = round((self.voltage * +current) / 10000, 1) / 100
+        self.watt = round(watt, 2)
 
         ## Remain Ah
         remainAh = int.from_bytes(data[62:64][::-1], byteorder='big')
@@ -219,3 +244,9 @@ class BatteryInfo:
             status = "Full Charge"
 
         return status
+
+    def set_debug(self, debug: bool):
+        '''
+          Switch debug mode. Set to true, to enable raising exceptions
+        '''
+        self._debug = debug
