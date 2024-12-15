@@ -4,13 +4,15 @@
 - Added handling exceptions
 - Added new fields to response:
     `error_code` - different from zero means error
-    `error_message` - human readble error message
+    `error_message` - human readable error message
 - `error_code` added as exit code of script
+- Added variable `dischargeSwitchState` - state of internal bluetooth controlled discharge switch
 
 ### Fixed
 - Fixed rounding of the calculated `watt` variable to two digits
 
 ### Changed
+- Changed parsing `heat` value to list of hex
 - Updated minor version of `dbus-fast` library
 
 ## [0.1.3] - 2024.11.12
@@ -41,7 +43,7 @@
 - Added `--pair` option for pairing \ unpairing with devices
 
 ## [0.1.0] - 2024.09.21
-  
+
 Initial version.
 
 ### Added

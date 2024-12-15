@@ -94,10 +94,14 @@ Get BMS information
     "cellTemperature": 25,
     "mosfetTemperature": 26,
     "heat": [
-        0,
-        0,
-        0,
-        0
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
     ],
     "protectState": [
         0,
@@ -115,7 +119,8 @@ Get BMS information
     "batteryState": 1,
     "SOC": "100%",
     "SOH": "105%",
-    "dischargesCount": 0,
+    "dischargeSwitchState": 0,
+    "dischargesCount": 3,
     "dischargesAHCount": 101,
     "firmwareVersion": "1.4.0",
     "manfactureDate": "1980-01-01",
@@ -124,7 +129,9 @@ Get BMS information
     "balance_status": "All cells are well-balanced.",
     "cell_status": "Battery is in optimal working condition.",
     "bms_status": null,
-    "heat_status": null
+    "heat_status": null,
+    "error_code": 0,
+    "error_message": null
 }
 ```
 

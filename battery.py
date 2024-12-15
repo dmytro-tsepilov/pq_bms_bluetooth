@@ -46,6 +46,7 @@ class BatteryInfo:
         self.batteryState = None
         self.SOC = None
         self.SOH = None
+        self.dischargeSwitchState = None
         self.dischargesCount = None
         self.dischargesAHCount = None
 
@@ -169,17 +170,29 @@ class BatteryInfo:
         self.cellTemperature = int.from_bytes(data[52:54][::-1], byteorder='big')
         self.mosfetTemperature = int.from_bytes(data[54:56][::-1], byteorder='big')
 
-        self.heat = list(data[68:72][::-1])
+        self.heat = list(data[68:72][::-1].hex())
+
+        ## Discharge switch state
+        ## State of internal bluetooth controlled discharge switch
+        if int(self.heat[6]) >= 8:
+            self.dischargeSwitchState = 0
+        else:
+            self.dischargeSwitchState = 1
 
         self.protectState = list(data[76:80][::-1])
         self.failureState = list(data[80:84][::-1])
         self.equilibriumState = int.from_bytes(data[84:88][::-1], byteorder='big')
+
+        ## 0 - ??
+        ## Charging - 1
+        ## Discharging - 2
+        ## Full Charge / Idle - 4
         self.batteryState = int.from_bytes(data[88:90][::-1], byteorder='big')
 
-        ## Charge level
+        ## State of charge (Charge level)
         self.SOC = int.from_bytes(data[90:92][::-1], byteorder='big')
 
-        ## Battery Status ??
+        ## State of Health ??
         self.SOH = int.from_bytes(data[92:96][::-1], byteorder='big')
 
         self.dischargesCount = int.from_bytes(data[96:100][::-1], byteorder='big')
