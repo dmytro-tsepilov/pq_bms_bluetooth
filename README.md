@@ -93,22 +93,8 @@ Get BMS information
     "factoryAh": 105.0,
     "cellTemperature": 25,
     "mosfetTemperature": 26,
-    "heat": [
-        "0",
-        "0",
-        "0",
-        "0",
-        "0",
-        "0",
-        "0",
-        "0"
-    ],
-    "protectState": [
-        0,
-        0,
-        0,
-        0
-    ],
+    "heat": "00000080",
+    "protectState": "00000000",
     "failureState": [
         0,
         0,

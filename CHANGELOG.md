@@ -1,4 +1,4 @@
-## [0.1.4] - 2024.12.13
+## [0.1.4] - 2024.12.16
 
 ### Added
 - Added handling exceptions
@@ -12,7 +12,7 @@
 - Fixed rounding of the calculated `watt` variable to two digits
 
 ### Changed
-- Changed parsing `heat` value to list of hex
+- Changed parsing `heat` variable to hex
 - Updated minor version of `dbus-fast` library
 
 ## [0.1.3] - 2024.11.12

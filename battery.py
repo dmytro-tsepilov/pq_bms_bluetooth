@@ -170,7 +170,7 @@ class BatteryInfo:
         self.cellTemperature = int.from_bytes(data[52:54][::-1], byteorder='big')
         self.mosfetTemperature = int.from_bytes(data[54:56][::-1], byteorder='big')
 
-        self.heat = list(data[68:72][::-1].hex())
+        self.heat = data[68:72][::-1].hex()
 
         ## Discharge switch state
         ## State of internal bluetooth controlled discharge switch
@@ -179,7 +179,7 @@ class BatteryInfo:
         else:
             self.dischargeSwitchState = 1
 
-        self.protectState = list(data[76:80][::-1])
+        self.protectState = data[76:80][::-1].hex()
         self.failureState = list(data[80:84][::-1])
         self.equilibriumState = int.from_bytes(data[84:88][::-1], byteorder='big')
 
@@ -212,6 +212,11 @@ class BatteryInfo:
             self.cell_status = "Fault alert! There may be a problem with cell."
         else:
             self.cell_status = "Battery is in optimal working condition."
+
+        if int(self.heat[7]) == 2:
+            self.heat_status = "Self-heating is on"
+        else:
+            self.heat_status = "Self-heating is off"
 
 
     def parse_version(self, data):
