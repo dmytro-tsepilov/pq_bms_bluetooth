@@ -167,8 +167,8 @@ class BatteryInfo:
 
         ## Temperature
         s = pow(2, 16)
-        self.cellTemperature = int.from_bytes(data[52:54][::-1], byteorder='big')
-        self.mosfetTemperature = int.from_bytes(data[54:56][::-1], byteorder='big')
+        self.cellTemperature = int.from_bytes(data[52:54][::-1], byteorder='big', signed=True)
+        self.mosfetTemperature = int.from_bytes(data[54:56][::-1], byteorder='big', signed=True)
 
         self.heat = data[68:72][::-1].hex()
 
@@ -183,10 +183,10 @@ class BatteryInfo:
         self.failureState = list(data[80:84][::-1])
         self.equilibriumState = int.from_bytes(data[84:88][::-1], byteorder='big')
 
-        ## 0 - ??
+        ## Idle - 0 ??
         ## Charging - 1
         ## Discharging - 2
-        ## Full Charge / Idle - 4
+        ## Full Charge - 4
         self.batteryState = int.from_bytes(data[88:90][::-1], byteorder='big')
 
         ## State of charge (Charge level)

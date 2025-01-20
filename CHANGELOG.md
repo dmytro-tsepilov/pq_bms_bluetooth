@@ -1,4 +1,4 @@
-## [0.1.4] - 2024.12.16
+## [0.1.4] - 2025.01.20
 
 ### Added
 - Added handling exceptions
@@ -10,6 +10,7 @@
 
 ### Fixed
 - Fixed rounding of the calculated `watt` variable to two digits
+- Fixed issue with negative temperature of sensors (thanks @nopeee535)
 
 ### Changed
 - Changed parsing `heat` variable to hex
