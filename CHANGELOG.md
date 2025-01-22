@@ -10,9 +10,11 @@
 
 ### Fixed
 - Fixed rounding of the calculated `watt` variable to two digits
+- Fixed detection of cells amount and voltage
 - Fixed issue with negative temperature of sensors (thanks @nopeee535)
 
 ### Changed
+- `SOC` and `SOH` variables changed to integer, without percentage string
 - Changed parsing `heat` variable to hex
 - Updated minor version of `dbus-fast` library
 

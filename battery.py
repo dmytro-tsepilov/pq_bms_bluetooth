@@ -123,8 +123,6 @@ class BatteryInfo:
         del state['_logger']
         del state['_request']
         del state['_debug']
-        state['SOC'] = f"{self.SOC}%"
-        state['SOH'] = f"{self.SOH}%"
 
         return json.dumps(
             state,
@@ -139,15 +137,16 @@ class BatteryInfo:
         self.packVoltage = int.from_bytes(data[8:12][::-1], byteorder='big')
         self.voltage = int.from_bytes(data[12:16][::-1], byteorder='big')
 
-        cell = 1
         batPack = data[16:48]
         for key, dt in enumerate(batPack):
-            if not dt or key % 2:
+            if key % 2:
                 continue
 
             cellVoltage = int.from_bytes([batPack[key + 1], dt], byteorder='big')
+            if not cellVoltage:
+                continue
+            cell = int(key / 2 + 1)
             self.batteryPack[cell] = cellVoltage/1000
-            cell += 1
 
         ## Load \ Unload current A
         current = int.from_bytes(data[48:52][::-1], byteorder='big', signed=True)
