@@ -1,7 +1,10 @@
-## [0.1.6] - 2025.09.11
+## [0.1.6] - 2025.10.11
+
+### Added
+- Added `deviceName` variable (require additional bluetooth request)
 
 ### Changed
-- Updated version of `dbus-fast` library 0.22.3 => 1+
+- Updated version of `bleak` library 0.22.3 => 1+
 
 ## [0.1.5] - 2025.03.07
 

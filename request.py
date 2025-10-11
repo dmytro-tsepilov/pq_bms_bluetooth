@@ -1,8 +1,7 @@
 import asyncio
 import logging
 from typing import Callable
-from bleak import BleakClient, BleakGATTCharacteristic
-
+from bleak import BleakClient, BleakScanner, BleakGATTCharacteristic
 
 class Request:
     def __init__(
@@ -90,6 +89,8 @@ class Request:
         """
         Parse and print bleak serivces and characteristics
         """
+        device = await self.get_device_name()
+        print(f"Device: {device[1]}")
         for service in services:
             print(service)
             for charc in service.characteristics:
@@ -100,6 +101,22 @@ class Request:
                     ## print("Model Number: {0}".format("".join(map(chr, model_number))))
                 except Exception as e:
                     print(f"\tError: {e}")
+
+    async def get_device_name(self) -> str:
+        """
+        Get device name and address
+        """
+        device = await BleakScanner.find_device_by_address(
+            self.bluetooth_device_mac,
+            timeout=self.bluetooth_timeout
+        )
+
+        if device:
+            self.logger.info("Device found %s...", device.name)
+            return device.address, device.name
+        else:
+            self.logger.info("Device not found.")
+            return None
 
     def _set_callback(self, callback_func: Callable) -> None:
         self.callback_func = callback_func

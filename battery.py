@@ -12,6 +12,7 @@ class BatteryInfo:
     Attributes:
         bluetooth_device_mac (str): Bluetooth address (MAC)
         pair_device (bool):         Pair with device before communication
+        fetch_name (bool):            Request device name (additional bluetooth request)
         timeout (int):              Timeout in seconds for bluetooth device communication
         logger (str):               Instance of python logger.
     """
@@ -38,9 +39,11 @@ class BatteryInfo:
         self,
         bluetooth_device_mac: str,
         pair_device: bool = False,
+        fetch_name: bool = False,
         timeout: int = 2,
         logger=None,
     ):
+        self.deviceName = None
         self.packVoltage = None
         self.voltage = None
         self.batteryPack: dict = {}
@@ -83,6 +86,8 @@ class BatteryInfo:
         else:
             self._logger = logging.getLogger(__name__)
 
+        self._fetch_name = fetch_name
+
         self._request = Request(
             bluetooth_device_mac,
             pair_device=pair_device,
@@ -122,6 +127,10 @@ class BatteryInfo:
         Function read BMS info via bluetooth using bleak client
         """
         try:
+            if self._fetch_name:
+                deviceName = asyncio.run(self._request.get_device_name())
+                self.deviceName = deviceName[1]
+
             asyncio.run(
                 self._request.bulk_send(
                     characteristic_id=self.BMS_CHARACTERISTIC_ID,
@@ -157,6 +166,7 @@ class BatteryInfo:
         del state["_logger"]
         del state["_request"]
         del state["_debug"]
+        del state["_fetch_name"]
 
         return json.dumps(
             state, default=lambda o: o.__dict__, sort_keys=False, indent=4
