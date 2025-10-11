@@ -131,7 +131,7 @@ List device GATT services and characteristics
 ## Tested on
 
 Software:
-- Python 3.10, 3.11
+- Python 3.10, 3.11, 3.13
 - Linux Ubuntu 22.04
 - Raspberry Pi OS Debian 12 (bookworm) (kernel 6.6+)
 

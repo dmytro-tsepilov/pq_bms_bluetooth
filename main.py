@@ -75,6 +75,7 @@ def main():
         handler.setFormatter(formatter)
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.DEBUG)
+        logger.addHandler(handler)
 
     macs = parse_macs(args.DEVICE_MACS)
 
