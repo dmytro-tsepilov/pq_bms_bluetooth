@@ -8,7 +8,7 @@ class Request:
         self,
         bluetooth_device_mac: str,
         pair_device: bool = False,
-        timeout: int = 2,
+        timeout: int = 10,
         logger=None,
     ):
         self.bluetooth_device_mac = bluetooth_device_mac
@@ -116,7 +116,7 @@ class Request:
             return device.address, device.name
         else:
             self.logger.info("Device not found.")
-            return None
+            return None, None
 
     def _set_callback(self, callback_func: Callable) -> None:
         self.callback_func = callback_func

@@ -1,3 +1,4 @@
+
 import json
 import asyncio
 import logging
@@ -12,7 +13,7 @@ class BatteryInfo:
     Attributes:
         bluetooth_device_mac (str): Bluetooth address (MAC)
         pair_device (bool):         Pair with device before communication
-        fetch_name (bool):            Request device name (additional bluetooth request)
+        fetch_name (bool):          Request device name (additional bluetooth request)
         timeout (int):              Timeout in seconds for bluetooth device communication
         logger (str):               Instance of python logger.
     """
@@ -40,7 +41,7 @@ class BatteryInfo:
         bluetooth_device_mac: str,
         pair_device: bool = False,
         fetch_name: bool = False,
-        timeout: int = 2,
+        timeout: int = 10,
         logger=None,
     ):
         self.deviceName = None
