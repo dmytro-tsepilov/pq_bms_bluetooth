@@ -2,6 +2,7 @@
 
 ### Added
 - Added `deviceName` variable (require additional bluetooth request)
+- Added support multiple batteries read bms
 
 ### Changed
 - Updated version of `bleak` library 0.22.3 => 1+

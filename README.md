@@ -62,7 +62,7 @@ Once it finds some devices and shows the list, stop scanning with command:\
 usage: main.py [-h] [--bms] [--timeout TIMEOUT] [--pair] [-s] [--verbose] DEVICE_MAC
 
 positional arguments:
-  DEVICE_MAC         Bluetooth device MAC address in format 12:34:56:78:AA:CC
+  DEVICE_MACS        Bluetooth device MAC address(es) in format 12:34:56:78:AA:CC, coma separated
 
 options:
   -h, --help         show this help message and exit
@@ -79,6 +79,7 @@ Get BMS information
 ```
 # python main.py 12:34:56:78:AA:CC --bms
 {
+    "deviceName": "P-12100BNNH19-A00001",
     "packVoltage": 12793,
     "voltage": 13338,
     "batteryPack": {
