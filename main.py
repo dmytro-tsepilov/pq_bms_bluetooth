@@ -43,15 +43,20 @@ def fetch_all_bms(macs: list, args, logger=None):
     Read bms info for each device
     """
     error_code = 0
+    bms_data = []
 
     for mac in macs:
         battery = BatteryInfo(mac, args.pair, True, args.timeout, logger)
         battery.read_bms()
-        print(battery.get_json())
+        if args.verbose:
+            print(battery.get_json())
+        else:
+            bms_data.append(battery.get_json())
 
         if battery.error_code:
             error_code = battery.error_code
 
+    print("[" + ",".join(bms_data) + "]")
     sys.exit(error_code)
 
 def parse_macs(device_macs: str) -> list:
