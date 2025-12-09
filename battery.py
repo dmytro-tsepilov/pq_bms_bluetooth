@@ -109,7 +109,7 @@ class BatteryInfo:
             self_instance.get_logger().info("Checksum %s", debug_message)
 
             if crc_packet != data_crc:
-                self_instance.error = self_instance.ERROR_CHECKSUM
+                self_instance.error_code = self_instance.ERROR_CHECKSUM
                 self_instance.error_message = f"Error: checksum missmatch {debug_message}"
 
             result = func(*args, **kwargs)
@@ -162,11 +162,11 @@ class BatteryInfo:
         """
         Function return complete JSON string of parsed BMS information
         """
-        state = self.__dict__
-        del state["_logger"]
-        del state["_request"]
-        del state["_debug"]
-        del state["_fetch_name"]
+        state = self.__dict__.copy()
+        state.pop("_logger", None)
+        state.pop("_request", None)
+        state.pop("_debug", None)
+        state.pop("_fetch_name", None)
 
         return json.dumps(
             state, default=lambda o: o.__dict__, sort_keys=False, indent=4
@@ -216,11 +216,12 @@ class BatteryInfo:
             data[54:56][::-1], byteorder="big", signed=True
         )
 
-        self.heat = data[68:72][::-1].hex()
+        heat_bytes = data[68:72][::-1]
+        self.heat = heat_bytes.hex()
 
         ## Discharge switch state
         ## State of internal bluetooth controlled discharge switch
-        if int(self.heat[6]) >= 8:
+        if heat_bytes[3] >= 8:
             self.dischargeSwitchState = 0
         else:
             self.dischargeSwitchState = 1
@@ -261,7 +262,7 @@ class BatteryInfo:
         else:
             self.cell_status = "Battery is in optimal working condition."
 
-        if int(self.heat[7]) == 2:
+        if heat_bytes[0] == 2:
             self.heat_status = "Self-heating is on"
         else:
             self.heat_status = "Self-heating is off"

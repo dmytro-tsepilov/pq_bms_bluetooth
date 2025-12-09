@@ -1,11 +1,17 @@
-## [0.1.6] - 2025.10.11
+## [0.1.6] - 2025.12.10
 
 ### Added
 - Added `deviceName` variable (require additional bluetooth request)
 - Added support multiple batteries read bms
 
 ### Changed
-- Updated version of `bleak` library 0.22.3 => 1+
+- Updated version of `bleak` library 0.22.3 => 2+
+- Updated version of `dbus-fast` library 2 => 3+
+
+### Fixed
+- Improved JSON generation
+- Improved heat parsing
+- Fixed CRC checksum error logging
 
 ## [0.1.5] - 2025.03.07
 
