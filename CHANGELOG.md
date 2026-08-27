@@ -1,12 +1,18 @@
-## [0.1.6] - 2025.12.10
+## [0.2.0] - 2026.08.26
+
+> [!WARNING]  
+> **Breaking change!**
 
 ### Added
 - Added `deviceName` variable (require additional bluetooth request)
+- Added `request_time` variable with measuring comunication time with battery
 - Added support multiple batteries read bms
 
 ### Changed
-- Updated version of `bleak` library 0.22.3 => 2+
-- Updated version of `dbus-fast` library 2 => 3+
+- [!WARNING] Return format change from single object to array of objects. `{"deviceName": "...} => [{"deviceName": "...}]`
+- Updated version of `bleak` library 0.22.3 => 3+
+- Updated version of `dbus-fast` library 2 => 5+
+- Default request timeout increased to 15
 
 ### Fixed
 - Improved JSON generation

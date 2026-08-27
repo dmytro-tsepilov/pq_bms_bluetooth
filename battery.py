@@ -147,7 +147,7 @@ class BatteryInfo:
                 )
             )
             end_time = time.perf_counter()
-            self.request_time = end_time - start_time
+            self.request_time = round(end_time - start_time, 4)
             self._logger.info("Execution time: %.6f seconds", self.request_time)
 
         except BleakError as e:

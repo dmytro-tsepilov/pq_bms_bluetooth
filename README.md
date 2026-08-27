@@ -78,7 +78,7 @@ options:
 Get BMS information
 ```
 # python main.py 12:34:56:78:AA:CC --bms
-{
+[{
     "deviceName": "P-12100BNNH19-A00001",
     "packVoltage": 12793,
     "voltage": 13338,
@@ -117,9 +117,10 @@ Get BMS information
     "cell_status": "Battery is in optimal working condition.",
     "bms_status": null,
     "heat_status": null,
+    "request_time": 5.1285,
     "error_code": 0,
     "error_message": null
-}
+}]
 ```
 
 <br><br>
