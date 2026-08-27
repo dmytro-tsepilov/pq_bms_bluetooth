@@ -22,7 +22,7 @@ def commands():
         "--timeout",
         help="Bluetooth response timeout in seconds (default: 10)",
         type=int,
-        default=10,
+        default=15,
     )
     parser.add_argument(
         "--pair", help="Pair with device before interacting", action="store_true"
