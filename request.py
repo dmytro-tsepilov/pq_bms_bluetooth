@@ -132,9 +132,10 @@ class Request:
 
     async def _data_callback(self, sender: BleakGATTCharacteristic, data: bytearray):
         self.logger.info(
-            "Function: %s\n characteristic_id: %s\n Raw data: %s",
+            "Function: %s\n characteristic_id: %s\n Length: %s\n Raw data: %s",
             self.callback_func.__name__,
             sender,
-            data,
+            len(data),
+            data
         )
         self.callback_func(data)
