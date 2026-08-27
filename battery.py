@@ -1,4 +1,5 @@
 import json
+import time
 import asyncio
 import logging
 from typing import Callable, Any
@@ -75,6 +76,8 @@ class BatteryInfo:
         self.bms_status = None
         self.heat_status = None
 
+        self.request_time = None
+
         ## Error handling
         self.error_code = 0
         self.error_message = None
@@ -127,6 +130,7 @@ class BatteryInfo:
         Function read BMS info via bluetooth using bleak client
         """
         try:
+            start_time = time.perf_counter()
             if self._fetch_name:
                 deviceName = asyncio.run(self._request.get_device_name())
                 self.deviceName = deviceName[1]
@@ -142,6 +146,10 @@ class BatteryInfo:
                     },
                 )
             )
+            end_time = time.perf_counter()
+            self.request_time = end_time - start_time
+            self._logger.info("Execution time: %.6f seconds", self.request_time)
+
         except BleakError as e:
             self.error_code = self.ERROR_BLEAK
             self.error_message = f"{e.__class__.__name__}: {e}"
