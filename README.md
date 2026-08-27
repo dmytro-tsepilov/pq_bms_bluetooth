@@ -133,11 +133,12 @@ List device GATT services and characteristics
 
 Software:
 - Python 3.10, 3.11, 3.13
-- Linux Ubuntu 22.04
+- Linux Ubuntu 22.04+
 - Raspberry Pi OS Debian 12 (bookworm) (kernel 6.6+)
 
 Hardware:
 - Power Queen LiFePO4 12V 100Ah
+- LiTime 12V LiFePO4 140Ah H190 Smart
 
 ## Community tested
 
