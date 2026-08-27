@@ -1,4 +1,5 @@
 import json
+import time
 import asyncio
 import logging
 from typing import Callable, Any
@@ -12,6 +13,7 @@ class BatteryInfo:
     Attributes:
         bluetooth_device_mac (str): Bluetooth address (MAC)
         pair_device (bool):         Pair with device before communication
+        fetch_name (bool):          Request device name (additional bluetooth request)
         timeout (int):              Timeout in seconds for bluetooth device communication
         logger (str):               Instance of python logger.
     """
@@ -38,9 +40,11 @@ class BatteryInfo:
         self,
         bluetooth_device_mac: str,
         pair_device: bool = False,
-        timeout: int = 2,
+        fetch_name: bool = False,
+        timeout: int = 10,
         logger=None,
     ):
+        self.deviceName = None
         self.packVoltage = None
         self.voltage = None
         self.batteryPack: dict = {}
@@ -72,6 +76,8 @@ class BatteryInfo:
         self.bms_status = None
         self.heat_status = None
 
+        self.request_time = None
+
         ## Error handling
         self.error_code = 0
         self.error_message = None
@@ -82,6 +88,8 @@ class BatteryInfo:
             self._logger = logger
         else:
             self._logger = logging.getLogger(__name__)
+
+        self._fetch_name = fetch_name
 
         self._request = Request(
             bluetooth_device_mac,
@@ -104,7 +112,7 @@ class BatteryInfo:
             self_instance.get_logger().info("Checksum %s", debug_message)
 
             if crc_packet != data_crc:
-                self_instance.error = self_instance.ERROR_CHECKSUM
+                self_instance.error_code = self_instance.ERROR_CHECKSUM
                 self_instance.error_message = f"Error: checksum missmatch {debug_message}"
 
             result = func(*args, **kwargs)
@@ -122,6 +130,11 @@ class BatteryInfo:
         Function read BMS info via bluetooth using bleak client
         """
         try:
+            start_time = time.perf_counter()
+            if self._fetch_name:
+                deviceName = asyncio.run(self._request.get_device_name())
+                self.deviceName = deviceName[1]
+
             asyncio.run(
                 self._request.bulk_send(
                     characteristic_id=self.BMS_CHARACTERISTIC_ID,
@@ -133,6 +146,10 @@ class BatteryInfo:
                     },
                 )
             )
+            end_time = time.perf_counter()
+            self.request_time = round(end_time - start_time, 4)
+            self._logger.info("Execution time: %.6f seconds", self.request_time)
+
         except BleakError as e:
             self.error_code = self.ERROR_BLEAK
             self.error_message = f"{e.__class__.__name__}: {e}"
@@ -153,10 +170,11 @@ class BatteryInfo:
         """
         Function return complete JSON string of parsed BMS information
         """
-        state = self.__dict__
-        del state["_logger"]
-        del state["_request"]
-        del state["_debug"]
+        state = self.__dict__.copy()
+        state.pop("_logger", None)
+        state.pop("_request", None)
+        state.pop("_debug", None)
+        state.pop("_fetch_name", None)
 
         return json.dumps(
             state, default=lambda o: o.__dict__, sort_keys=False, indent=4
@@ -206,11 +224,12 @@ class BatteryInfo:
             data[54:56][::-1], byteorder="big", signed=True
         )
 
-        self.heat = data[68:72][::-1].hex()
+        heat_bytes = data[68:72][::-1]
+        self.heat = heat_bytes.hex()
 
         ## Discharge switch state
         ## State of internal bluetooth controlled discharge switch
-        if int(self.heat[6]) >= 8:
+        if heat_bytes[3] >= 8:
             self.dischargeSwitchState = 0
         else:
             self.dischargeSwitchState = 1
@@ -251,7 +270,7 @@ class BatteryInfo:
         else:
             self.cell_status = "Battery is in optimal working condition."
 
-        if int(self.heat[7]) == 2:
+        if heat_bytes[0] == 2:
             self.heat_status = "Self-heating is on"
         else:
             self.heat_status = "Self-heating is off"

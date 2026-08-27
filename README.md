@@ -62,7 +62,7 @@ Once it finds some devices and shows the list, stop scanning with command:\
 usage: main.py [-h] [--bms] [--timeout TIMEOUT] [--pair] [-s] [--verbose] DEVICE_MAC
 
 positional arguments:
-  DEVICE_MAC         Bluetooth device MAC address in format 12:34:56:78:AA:CC
+  DEVICE_MACS        Bluetooth device MAC address(es) in format 12:34:56:78:AA:CC, coma separated
 
 options:
   -h, --help         show this help message and exit
@@ -78,7 +78,8 @@ options:
 Get BMS information
 ```
 # python main.py 12:34:56:78:AA:CC --bms
-{
+[{
+    "deviceName": "P-12100BNNH19-A00001",
     "packVoltage": 12793,
     "voltage": 13338,
     "batteryPack": {
@@ -116,9 +117,10 @@ Get BMS information
     "cell_status": "Battery is in optimal working condition.",
     "bms_status": null,
     "heat_status": null,
+    "request_time": 5.1285,
     "error_code": 0,
     "error_message": null
-}
+}]
 ```
 
 <br><br>
@@ -130,12 +132,13 @@ List device GATT services and characteristics
 ## Tested on
 
 Software:
-- Python 3.10, 3.11
-- Linux Ubuntu 22.04
+- Python 3.10, 3.11, 3.13
+- Linux Ubuntu 22.04+
 - Raspberry Pi OS Debian 12 (bookworm) (kernel 6.6+)
 
 Hardware:
 - Power Queen LiFePO4 12V 100Ah
+- LiTime 12V LiFePO4 140Ah H190 Smart
 
 ## Community tested
 
