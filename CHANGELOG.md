@@ -9,7 +9,7 @@
 - Added support multiple batteries read bms
 
 ### Changed
-- [!WARNING] Return format change from single object to array of objects. `{"deviceName": "...} => [{"deviceName": "...}]`
+- **IMPORTANT!** Return format change from single object to array of objects. `{"deviceName": "...} => [{"deviceName": "...}]`
 - Updated version of `bleak` library 0.22.3 => 3+
 - Updated version of `dbus-fast` library 2 => 5+
 - Default request timeout increased to 15
