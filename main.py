@@ -34,6 +34,12 @@ def commands():
         action="store_true",
     )
     parser.add_argument("--verbose", help="Verbose logs", action="store_true")
+    parser.add_argument(
+        "--logfile",
+        help="Save logs to a file",
+        type=str,
+        default=None,
+    )
 
     args = parser.parse_args()
     return args
@@ -74,13 +80,23 @@ def main():
 
     logger = None
 
-    if args.verbose:
-        handler = logging.StreamHandler(sys.stdout)
-        formatter = logging.Formatter("%(asctime)s [%(funcName)s] %(message)s")
-        handler.setFormatter(formatter)
+    if args.verbose or args.logfile:
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.DEBUG)
-        logger.addHandler(handler)
+        formatter = logging.Formatter("%(asctime)s %(levelname)s [%(funcName)s] %(message)s")
+
+        if args.verbose:
+            stream_handler = logging.StreamHandler(sys.stdout)
+            stream_handler.setFormatter(formatter)
+            logger.addHandler(stream_handler)
+
+        if args.logfile:
+            file_handler = logging.FileHandler(args.logfile)
+            file_handler.setFormatter(formatter)
+            file_handler.setLevel(logging.DEBUG)
+            logger.addHandler(file_handler)
+
+    logger.info("----Starting BMS Bluetooth Reader----")
 
     macs = parse_macs(args.DEVICE_MACS)
 

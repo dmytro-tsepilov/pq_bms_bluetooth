@@ -90,6 +90,7 @@ class BatteryInfo:
             self._logger = logging.getLogger(__name__)
 
         self._fetch_name = fetch_name
+        self._device_mac = bluetooth_device_mac
 
         self._request = Request(
             bluetooth_device_mac,
@@ -129,6 +130,7 @@ class BatteryInfo:
         """
         Function read BMS info via bluetooth using bleak client
         """
+        self._logger.info("---Reading BMS info for: %s", self._device_mac)
         try:
             start_time = time.perf_counter()
             if self._fetch_name:
@@ -148,21 +150,24 @@ class BatteryInfo:
             )
             end_time = time.perf_counter()
             self.request_time = round(end_time - start_time, 4)
-            self._logger.info("Execution time: %.6f seconds", self.request_time)
+            self._logger.info("---Execution time: %.6f seconds", self.request_time)
 
         except BleakError as e:
             self.error_code = self.ERROR_BLEAK
             self.error_message = f"{e.__class__.__name__}: {e}"
+            self._logger.error("BatteryInfo: %s", self.error_message)
             if self._debug:
                 raise
         except TimeoutError as e:
             self.error_code = self.ERROR_TIMEOUT
             self.error_message = f"{e.__class__.__name__}: {e}"
+            self._logger.error("BatteryInfo: %s", self.error_message)
             if self._debug:
                 raise
         except Exception as e:
             self.error_code = self.ERROR_GENERIC
             self.error_message = f"{e}"
+            self._logger.error("BatteryInfo: %s", self.error_message)
             if self._debug:
                 raise
 
@@ -175,6 +180,7 @@ class BatteryInfo:
         state.pop("_request", None)
         state.pop("_debug", None)
         state.pop("_fetch_name", None)
+        state.pop("_device_mac", None)
 
         return json.dumps(
             state, default=lambda o: o.__dict__, sort_keys=False, indent=4
@@ -226,6 +232,9 @@ class BatteryInfo:
 
         heat_bytes = data[68:72][::-1]
         self.heat = heat_bytes.hex()
+
+        heat_meta = self.parse_heat_data(heat_bytes)
+        self._logger.info(heat_meta)
 
         ## Discharge switch state
         ## State of internal bluetooth controlled discharge switch
@@ -323,6 +332,28 @@ class BatteryInfo:
             status = "Full Charge"
 
         return status
+
+    def parse_heat_data(self, heat_bytes: bytes) -> dict:
+        """
+        Parse heating data from bytearray
+        """
+        state_code = heat_bytes[0]
+        power_code = heat_bytes[1]
+        alarm_mask = heat_bytes[2]
+        mos_mask = heat_bytes[3]
+
+        state_map = {0: "Off", 1: "Standby", 2: "Heating Active", 3: "Fault"}
+        power_map = {0: "None", 1: "Charger", 2: "Battery"}
+
+        return {
+            "heating_state": state_map.get(state_code, "Unknown"),
+            "power_source": power_map.get(power_code, "Unknown"),
+            "heating_active": state_code == 2,
+            "chg_mos_on": bool(mos_mask & 0x01),
+            "dsg_mos_on": bool(mos_mask & 0x02),
+            "heater_mos_on": bool(mos_mask & 0x04),
+            "manual_off": bool(mos_mask & 0x08),
+        }
 
     def crc_sum(self, raw_data) -> int:
         """
